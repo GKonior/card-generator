@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef, Component } from 'react';
 import TextField from '@mui/material/TextField';
 import { Box, SelectChangeEvent } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
@@ -7,17 +7,17 @@ import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
-import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import { componentsTypes } from './constants';
 import { getBackgroundColor } from './helpers';
-import Grid from "@mui/material/Grid";
-import FormLabel from "@mui/material/FormLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import SpellCard from './components/SpellCard';
+import { useReactToPrint } from 'react-to-print';
+import Grid from '@mui/material/Grid';
 
 type Inputs = {
   cardClass: string;
@@ -28,6 +28,7 @@ type Inputs = {
   rangeUnit: string;
   spellComponents: string[];
   spellDuration: string;
+  spellDescription: string;
 };
 
 const defaultValues = {
@@ -38,13 +39,14 @@ const defaultValues = {
   spellRange: '',
   rangeUnit: 'm',
   spellComponents: [],
-  spellDuration: ''
+  spellDuration: '',
+  spellDescription: '',
 };
 
 function App() {
   const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
   const { register, watch, handleSubmit, setValue } = useForm<Inputs>({
-      defaultValues
+    defaultValues,
   });
   const [cardClass, setCardClass] = useState<string>('');
   const cardColor = getBackgroundColor(cardClass);
@@ -55,7 +57,8 @@ function App() {
   const spellRange = watch('spellRange');
   const spellComponents = watch('spellComponents');
   const spellDuration = watch('spellDuration');
-
+  const rangeUnit = watch('rangeUnit');
+  const spellDescription = watch('spellDescription');
 
   const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
 
@@ -73,109 +76,194 @@ function App() {
     setCardClass(event.target.value as string);
   };
 
+  const ref = useRef<Component>(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+  });
+
   useEffect(() => {
     setValue('spellComponents', selectedComponents);
     setValue('cardClass', cardClass);
   }, [selectedComponents, cardClass]);
 
   return (
-    <>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Klasa</InputLabel>
-          <Select label="Klasa" value={cardClass} onChange={handleClassChange}>
-            <MenuItem value="bard">Bard</MenuItem>
-            <MenuItem value="paladin">Paladyn</MenuItem>
-            <MenuItem value="wizard">Mag</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField label="Nazwa czaru" {...register('spellName')} />
-        <TextField label="Szkoła i krąg" {...register('spellLevel')} />
-        <TextField label="Czas rzucania" {...register('spellCastTime')} />
-        <TextField label="Zasięg" {...register('spellRange')} />
-        <FormControl component="fieldset">
-          <RadioGroup {...register('rangeUnit')}>
-              <FormControlLabel value="m" control={<Radio />} label="Metry" />
-              <FormControlLabel value="ft" control={<Radio />} label="Stopy" />
-          </RadioGroup>
-        </FormControl>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel>Komponenty</InputLabel>
-          <Select
-            multiple
-            value={selectedComponents}
-            onChange={handleChange}
-            input={<OutlinedInput label="Komponenty" />}
-            renderValue={selected => selected.join(', ')}
-          >
-            {componentsTypes.map(component => (
-              <MenuItem key={component} value={component}>
-                <Checkbox
-                  checked={selectedComponents.indexOf(component) > -1}
-                />
-                <ListItemText primary={component} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField label="Czas trwania"  {...register('spellDuration')}/>
-        <Button type="submit">Zapisz kartę</Button>
-      </Box>
+    <Box
+      sx={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Box
         sx={{
-          bgcolor: cardColor,
-          width: 'calc(6.3cm - 20px )',
-          maxWidth: '6.3cm',
-          height: 'calc(8.9cm - 20px )',
+          border: '1px solid #d6bb82',
           borderRadius: '10px',
-          position: 'relative',
-          padding: '10px',
+          width: '95%',
+          padding: 6,
+          display: 'flex',
         }}
       >
         <Box
+          component="form"
           sx={{
-            bgcolor: '#fff',
-            borderRadius: '10px',
-            width: '100%',
-            height: '100%',
-            textAlign: 'center'
+            '& > :not(style)': { m: 1, width: '500px' },
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <FormControl size="small" fullWidth color="primary">
+                <InputLabel>Klasa</InputLabel>
+                <Select
+                  label="Klasa"
+                  value={cardClass}
+                  onChange={handleClassChange}
+                  size="small"
+                >
+                  <MenuItem value="bard">Bard</MenuItem>
+                  <MenuItem value="paladin">Paladyn</MenuItem>
+                  <MenuItem value="wizard">Mag</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Nazwa czaru"
+                size="small"
+                fullWidth
+                {...register('spellName')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Szkoła i krąg"
+                size="small"
+                fullWidth
+                {...register('spellLevel')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Czas rzucania"
+                size="small"
+                fullWidth
+                {...register('spellCastTime')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Zasięg"
+                size="small"
+                fullWidth
+                {...register('spellRange')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl component="fieldset">
+                <RadioGroup row {...register('rangeUnit')}>
+                  <FormControlLabel
+                    value="m"
+                    control={<Radio />}
+                    label="Metry"
+                  />
+                  <FormControlLabel
+                    value="ft"
+                    control={<Radio />}
+                    label="Stopy"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Komponenty</InputLabel>
+                <Select
+                  multiple
+                  value={selectedComponents}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Komponenty" />}
+                  size="small"
+                  renderValue={selected => selected.join(', ')}
+                >
+                  {componentsTypes.map(component => (
+                    <MenuItem key={component} value={component}>
+                      <Checkbox
+                        checked={selectedComponents.indexOf(component) > -1}
+                      />
+                      <ListItemText primary={component} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Czas trwania"
+                size="small"
+                fullWidth
+                {...register('spellDuration')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Opis"
+                multiline
+                fullWidth
+                minRows={10}
+                {...register('spellDescription')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                onClick={handlePrint}
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Drukuj kartę
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                type="submit"
+              >
+                Zapisz kartę
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-            <Typography sx={{ fontWeight: 700 }}>{spellName}</Typography>
-            <Box sx={{ bgcolor: cardColor }}>
-                <Typography sx={{color: '#fff', fontSize: '10px' }}>{spellLevel}</Typography>
-            </Box>
-            <Grid container>
-                <Grid item xs={6} sx={{ borderBottom: `2px solid ${cardColor}`, borderRight: `2px solid ${cardColor}` }}>
-                    <Typography sx={{color: cardColor, fontWeight: 700, fontSize: '12px' }}>CZAS RZUCANIA</Typography>
-                    <Typography sx={{fontSize: '12px' }}>{spellCastTime}</Typography>
-                </Grid>
-                <Grid item xs={6} sx={{ borderBottom: `2px solid ${cardColor}` }}>
-                    <Typography sx={{color: cardColor, fontWeight: 700, fontSize: '12px' }}>ZASIĘG</Typography>
-                    <Typography sx={{fontSize: '12px' }}>{spellRange}</Typography>
-                </Grid>
-                <Grid item xs={6} sx={{ borderBottom: `10px solid ${cardColor}`, borderRight: `2px solid ${cardColor}` }}>
-                    <Typography sx={{color: cardColor, fontWeight: 700, fontSize: '12px' }}>KOMPONENTY</Typography>
-                    <Typography sx={{fontSize: '12px' }}>{spellComponents}</Typography>
-                </Grid>
-                <Grid item xs={6} sx={{ borderBottom: `10px solid ${cardColor}` }}>
-                    <Typography sx={{color: cardColor, fontWeight: 700, fontSize: '12px' }}>CZAS TRWANIA</Typography>
-                    <Typography sx={{fontSize: '12px' }}>{spellDuration}</Typography>
-                </Grid>
-            </Grid>
+          <SpellCard
+            cardColor={cardColor}
+            spellName={spellName}
+            spellLevel={spellLevel}
+            spellCastTime={spellCastTime}
+            spellRange={spellRange}
+            spellComponents={spellComponents}
+            rangeUnit={rangeUnit}
+            spellDuration={spellDuration}
+            spellDescription={spellDescription}
+            ref={ref}
+          />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 
