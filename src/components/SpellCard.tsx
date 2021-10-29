@@ -2,19 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-
-type SpellCardProps = {
-  spellName: string;
-  spellLevel: string;
-  spellCastTime: string;
-  spellRange: string;
-  rangeUnit: string;
-  spellComponents: string[];
-  spellDuration: string;
-  cardColor: string;
-  spellDescription: string;
-  ref: any;
-};
+import { SpellCardTypes } from '../types/SpellCardTypes';
 
 const SpellCard = ({
   spellName,
@@ -24,18 +12,15 @@ const SpellCard = ({
   spellComponents,
   spellDuration,
   cardColor,
-  rangeUnit,
   spellDescription,
-  ref,
-}: SpellCardProps) => {
+}: SpellCardTypes) => {
   return (
     <Box
-      ref={ref}
       sx={{
         bgcolor: cardColor,
-        width: 'calc(6.3cm - 20px )',
-        maxWidth: '6.3cm',
-        height: 'calc(8.9cm - 20px )',
+        width: 'calc(6.7cm - 20px )',
+        maxWidth: '6.7cm',
+        height: 'calc(9.1cm - 20px )',
         borderRadius: '10px',
         position: 'relative',
         padding: '10px',
@@ -119,8 +104,10 @@ const SpellCard = ({
             </Typography>
             <Typography sx={{ fontSize: '11px' }}>{spellDuration}</Typography>
           </Grid>
-          <Grid item xs={12}>
-            <Typography>{spellDescription}</Typography>
+          <Grid item xs={12} sx={{ p: 1, textAlign: 'left' }}>
+            <Typography sx={{ fontSize: '10px' }}>
+              {spellDescription}
+            </Typography>
           </Grid>
         </Grid>
       </Box>
