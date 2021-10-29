@@ -32,8 +32,6 @@ function App() {
   const rangeUnit = watch('rangeUnit');
   const spellDescription = watch('spellDescription');
 
-  console.log(spellName);
-
   const onSubmit: SubmitHandler<FormInputsTypes> = data => console.log(data);
 
   const handleComponentsChange = (
@@ -49,7 +47,7 @@ function App() {
   useEffect(() => {
     setValue('spellComponents', selectedComponents);
     setValue('cardClass', cardClass);
-  }, [selectedComponents, cardClass]);
+  }, [selectedComponents, cardClass, setValue]);
 
   const ref = useRef<Component>(null);
 

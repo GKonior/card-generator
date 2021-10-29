@@ -15,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { UseFormRegister } from 'react-hook-form';
 import { FormInputsTypes } from '../../types/FormInputsTypes';
 
-type FormInputs = {
+type FormInputsProps = {
   register: UseFormRegister<FormInputsTypes>;
   cardClass: string;
   handleClassChange: (event: SelectChangeEvent) => void;
@@ -29,7 +29,7 @@ const FormInputs = ({
   handleClassChange,
   selectedComponents,
   handleComponentsChange,
-}: FormInputs) => {
+}: FormInputsProps) => {
   return (
     <>
       <Grid item xs={6}>
