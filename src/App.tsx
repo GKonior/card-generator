@@ -56,12 +56,12 @@ function App() {
             onChange={handlers}
             selectedComponents={spellComponents}
           />
-          <Grid item xs={6}>
+          <Grid item sm={12} md={6}>
             <Button onClick={handlePrint} variant="contained">
               Drukuj kartę
             </Button>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item sm={12} md={6}>
             <Button variant="outlined">Zapisz kartę</Button>
           </Grid>
         </Grid>

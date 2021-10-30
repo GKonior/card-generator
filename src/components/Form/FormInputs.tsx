@@ -40,7 +40,9 @@ const FormInputs = ({
             size="small"
           >
             {cardClassesOptions.map(card => (
-              <MenuItem value={card.value}>{card.label}</MenuItem>
+              <MenuItem value={card.value} key={card.value}>
+                {card.label}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
