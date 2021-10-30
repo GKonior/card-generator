@@ -15,16 +15,19 @@ import ListItemText from '@mui/material/ListItemText';
 
 type FormInputsProps = {
   cardClass: string;
+  rangeUnit: string;
   selectedComponents: string[];
   onChange: any;
 };
 
 const FormInputs = ({
   cardClass,
+  rangeUnit,
   selectedComponents,
   onChange,
 }: FormInputsProps) => {
-  const { handleChange, handleComponentsChange } = onChange;
+  const { handleChange, handleComponentsChange, handleSpellRangeChange } =
+    onChange;
   return (
     <>
       <Grid item xs={6}>
@@ -69,14 +72,18 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Zasięg"
-          onChange={e => handleChange(e, 'spellRange')}
+          onChange={handleSpellRangeChange}
           size="small"
           fullWidth
         />
       </Grid>
       <Grid item xs={6}>
         <FormControl component="fieldset">
-          <RadioGroup row>
+          <RadioGroup
+            row
+            onChange={e => handleChange(e, 'rangeUnit')}
+            value={rangeUnit}
+          >
             <FormControlLabel value="m" control={<Radio />} label="Metry" />
             <FormControlLabel value="f" control={<Radio />} label="Stopy" />
           </RadioGroup>

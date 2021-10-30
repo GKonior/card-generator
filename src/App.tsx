@@ -52,6 +52,7 @@ function App() {
         <Grid container spacing={2}>
           <FormInputs
             cardClass={cardClass}
+            rangeUnit={rangeUnit}
             onChange={handlers}
             selectedComponents={spellComponents}
           />

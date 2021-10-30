@@ -22,7 +22,10 @@ const useCardData = () => {
   );
 
   const handleChange = (event: SelectChangeEvent, field: string) => {
-    const value = event.target.value;
+    const {
+      target: { value },
+    } = event;
+
     switch (field) {
       case 'cardClass':
         setCardClass(value);
@@ -51,6 +54,20 @@ const useCardData = () => {
     }
   };
 
+  const handleSpellRangeChange = (event: SelectChangeEvent) => {
+    const {
+      target: { value },
+    } = event;
+
+    const valueAsNumber = parseInt(value);
+
+    if (rangeUnit === 'f') {
+      setSpellRange(`${Math.trunc(valueAsNumber * 0.3048)} m`);
+    } else {
+      setSpellRange(`${value} m`);
+    }
+  };
+
   const handleComponentsChange = (
     event: SelectChangeEvent<typeof spellComponents>,
   ) => {
@@ -76,6 +93,7 @@ const useCardData = () => {
     handlers: {
       handleChange,
       handleComponentsChange,
+      handleSpellRangeChange,
     },
   };
 };
