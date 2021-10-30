@@ -1,5 +1,16 @@
 export const cardColors = {
+  artificer: '#B89343',
+  barbarian: '#792C34',
   bard: '#802263',
-  paladin: '#38a5c7',
-  wizard: '#ad2a2c',
+  bloodHunter: '#802263',
+  cleric: '#D49A13',
+  druid: '#59AC38',
+  fighter: '#687D87',
+  monk: '#D18629',
+  paladin: '#38A5C7',
+  ranger: '#614B1F',
+  rogue: '#0E1215',
+  sorcerer: '#AD2A2C',
+  wizard: '#AD2A2C',
+  warlock: '#4E4AB8',
 };
