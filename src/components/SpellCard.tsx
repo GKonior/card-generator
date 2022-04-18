@@ -15,6 +15,7 @@ const SpellCard = ({
   spellDescription,
   rangeUnit,
 }: SpellCardTypes) => {
+  console.log('spellComponents', spellComponents);
   return (
     <Box
       sx={{
@@ -72,9 +73,7 @@ const SpellCard = ({
             >
               ZASIĘG
             </Typography>
-            <Typography sx={{ fontSize: '12px' }}>
-              {spellRange} {console.log(typeof spellRange)}
-            </Typography>
+            <Typography sx={{ fontSize: '12px' }}>{spellRange}</Typography>
           </Grid>
           <Grid
             item
@@ -93,7 +92,14 @@ const SpellCard = ({
             >
               KOMPONENTY
             </Typography>
-            <Typography sx={{ fontSize: '12px' }}>{spellComponents}</Typography>
+            <Typography sx={{ fontSize: '12px' }}>
+              {spellComponents.map((component, i) => (
+                <span style={{ textTransform: 'uppercase' }} key={i}>
+                  {i > 0 && ', '}
+                  {component}
+                </span>
+              ))}
+            </Typography>
           </Grid>
           <Grid item xs={6} sx={{ borderBottom: `10px solid ${cardColor}` }}>
             <Typography

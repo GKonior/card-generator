@@ -5,7 +5,7 @@ export const defaultValues = {
   spellCastTime: '1 akcja',
   spellRange: 'na siebie',
   rangeUnit: 'm',
-  spellComponents: ['W', 'S', 'M'],
+  spellComponents: ['w', 's', 'm'],
   spellDuration: '1 godzina',
   spellDescription:
     'Komponenty materialne: niewielka ilość alkoholu lub spirytusu. Wspomagając się nekromantyczną namiastką życia, zyskujesz 1k4+4 tymczasowych PW na czas trwania czaru.',

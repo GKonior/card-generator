@@ -100,15 +100,15 @@ const FormInputs = ({
             value={selectedComponents}
             input={<OutlinedInput label="Komponenty" />}
             size="small"
-            renderValue={selected => selected.join(', ')}
+            renderValue={selected => selected.join(', ').toUpperCase()}
             onChange={handleComponentsChange}
           >
             {componentsOptions.map(component => (
-              <MenuItem key={component} value={component}>
+              <MenuItem key={component.value} value={component.value}>
                 <Checkbox
-                  checked={selectedComponents.indexOf(component) > -1}
+                  checked={selectedComponents.includes(component.value)}
                 />
-                <ListItemText primary={component} />
+                <ListItemText primary={component.label} />
               </MenuItem>
             ))}
           </Select>
