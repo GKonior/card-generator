@@ -13,6 +13,7 @@ const SpellCard = ({
   spellDuration,
   cardColor,
   spellDescription,
+  rangeUnit,
 }: SpellCardTypes) => {
   return (
     <Box
@@ -71,7 +72,9 @@ const SpellCard = ({
             >
               ZASIĘG
             </Typography>
-            <Typography sx={{ fontSize: '12px' }}>{spellRange}</Typography>
+            <Typography sx={{ fontSize: '12px' }}>
+              {spellRange} {console.log(typeof spellRange)}
+            </Typography>
           </Grid>
           <Grid
             item
@@ -105,7 +108,7 @@ const SpellCard = ({
             <Typography sx={{ fontSize: '11px' }}>{spellDuration}</Typography>
           </Grid>
           <Grid item xs={12} sx={{ p: 1, textAlign: 'left' }}>
-            <Typography sx={{ fontSize: '10px' }}>
+            <Typography sx={{ fontWeight: 500, fontSize: '10px' }}>
               {spellDescription}
             </Typography>
           </Grid>

@@ -1,8 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { defaultValues } from '../constants';
 import { SelectChangeEvent } from '@mui/material/Select';
 
+type FieldTypes =
+  | 'cardClass'
+  | 'spellName'
+  | 'spellLevel'
+  | 'spellCastTime'
+  | 'spellRange'
+  | 'spellDuration'
+  | 'rangeUnit'
+  | 'spellDescription';
+
 const useCardData = () => {
+  const [values, setValues] = useState(defaultValues);
+
   const [cardClass, setCardClass] = useState(defaultValues.cardClass);
   const [spellName, setSpellName] = useState(defaultValues.spellName);
   const [spellLevel, setSpellLevel] = useState(defaultValues.spellLevel);
@@ -20,12 +32,14 @@ const useCardData = () => {
   const [spellDescription, setSpellDescription] = useState(
     defaultValues.spellDescription,
   );
+  const [calculatedSpellRange, setCalculatedSpellRange] = useState('');
 
-  const handleChange = (event: SelectChangeEvent, field: string) => {
-    const {
-      target: { value },
-    } = event;
+  const valueChange = (value: string, field: FieldTypes) => {
+    const newValues = { ...values, field: values[field] };
+    setValues(newValues);
+  };
 
+  const handleChange = (value: string, field: FieldTypes) => {
     switch (field) {
       case 'cardClass':
         setCardClass(value);
@@ -54,20 +68,6 @@ const useCardData = () => {
     }
   };
 
-  const handleSpellRangeChange = (event: SelectChangeEvent) => {
-    const {
-      target: { value },
-    } = event;
-
-    const valueAsNumber = parseInt(value);
-
-    if (rangeUnit === 'f') {
-      setSpellRange(`${Math.trunc(valueAsNumber * 0.3048)} m`);
-    } else {
-      setSpellRange(`${value} m`);
-    }
-  };
-
   const handleComponentsChange = (
     event: SelectChangeEvent<typeof spellComponents>,
   ) => {
@@ -78,13 +78,27 @@ const useCardData = () => {
     setSpellComponents(components.map(component => component.split('')[0]));
   };
 
+  useEffect(() => {
+    const range = parseInt(spellRange);
+
+    if (isNaN(range)) {
+      setCalculatedSpellRange(spellRange);
+    } else {
+      if (rangeUnit === 'f') {
+        setCalculatedSpellRange(`${(range * 0.3048).toPrecision(2)} m`);
+      } else {
+        setCalculatedSpellRange(`${range} m`);
+      }
+    }
+  }, [spellRange, rangeUnit]);
+
   return {
     values: {
       cardClass,
       spellName,
       spellLevel,
       spellCastTime,
-      spellRange,
+      spellRange: calculatedSpellRange,
       spellComponents,
       spellDuration,
       rangeUnit,
@@ -93,7 +107,6 @@ const useCardData = () => {
     handlers: {
       handleChange,
       handleComponentsChange,
-      handleSpellRangeChange,
     },
   };
 };

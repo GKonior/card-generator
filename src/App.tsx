@@ -7,9 +7,11 @@ import Grid from '@mui/material/Grid';
 import FormInputs from './components/Form/FormInputs';
 import Button from './components/Button';
 import useCardData from './hooks/useCardData';
+import Tilt from 'react-parallax-tilt';
 
 function App() {
   const { values, handlers } = useCardData();
+
   const {
     cardClass,
     spellName,
@@ -21,6 +23,7 @@ function App() {
     rangeUnit,
     spellDescription,
   } = values;
+
   const cardColor = getBackgroundColor(cardClass);
 
   const ref = useRef<Component>(null);
@@ -37,6 +40,8 @@ function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        background: 'url(assets/background.jpg)',
+        backgroundSize: 'cover',
       }}
     >
       <Box
@@ -47,6 +52,9 @@ function App() {
           padding: 6,
           display: 'flex',
           maxWidth: 700,
+          bgcolor: '#ffffffa6',
+          backdropFilter: 'blur(6px)',
+          boxShadow: '0 0 1rem 0 rgb(0 0 0 / 20%)',
         }}
       >
         <Grid container spacing={2}>
@@ -67,20 +75,22 @@ function App() {
         </Grid>
       </Box>
       <Box ref={ref} ml={6}>
-        <SpellCard
-          cardColor={cardColor}
-          spellName={spellName || 'FAŁSZYWE ŻYCIE'}
-          spellLevel={spellLevel || 'Nekromancja, 1 krąg'}
-          spellCastTime={spellCastTime || '1 akcja'}
-          spellRange={spellRange || 'na siebie'}
-          spellComponents={spellComponents}
-          rangeUnit={rangeUnit}
-          spellDuration={spellDuration || '1 godzina'}
-          spellDescription={
-            spellDescription ||
-            'Komponenty materialne: niewielka ilość alkoholu lub spirytusu. Wspomagając się nekromantyczną namiastką życia, zyskujesz 1k4+4 tymczasowych PW na czas trwania czaru.'
-          }
-        />
+        <Tilt glareEnable>
+          <SpellCard
+            cardColor={cardColor}
+            spellName={spellName || 'FAŁSZYWE ŻYCIE'}
+            spellLevel={spellLevel || 'Nekromancja, 1 krąg'}
+            spellCastTime={spellCastTime || '1 akcja'}
+            spellRange={spellRange || 'na siebie'}
+            spellComponents={spellComponents}
+            rangeUnit={rangeUnit}
+            spellDuration={spellDuration || '1 godzina'}
+            spellDescription={
+              spellDescription ||
+              'Komponenty materialne: niewielka ilość alkoholu lub spirytusu. Wspomagając się nekromantyczną namiastką życia, zyskujesz 1k4+4 tymczasowych PW na czas trwania czaru.'
+            }
+          />
+        </Tilt>
       </Box>
     </Box>
   );

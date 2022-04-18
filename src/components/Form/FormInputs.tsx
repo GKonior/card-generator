@@ -28,6 +28,7 @@ const FormInputs = ({
 }: FormInputsProps) => {
   const { handleChange, handleComponentsChange, handleSpellRangeChange } =
     onChange;
+
   return (
     <>
       <Grid item xs={6}>
@@ -36,7 +37,7 @@ const FormInputs = ({
           <Select
             label="Klasa"
             value={cardClass}
-            onChange={e => handleChange(e, 'cardClass')}
+            onChange={e => handleChange(e.target.value, 'cardClass')}
             size="small"
           >
             {cardClassesOptions.map(card => (
@@ -50,7 +51,7 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Nazwa czaru"
-          onChange={e => handleChange(e, 'spellName')}
+          onChange={e => handleChange(e.target.value, 'spellName')}
           size="small"
           fullWidth
         />
@@ -58,7 +59,7 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Szkoła i krąg"
-          onChange={e => handleChange(e, 'spellLevel')}
+          onChange={e => handleChange(e.target.value, 'spellLevel')}
           size="small"
           fullWidth
         />
@@ -66,7 +67,7 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Czas rzucania"
-          onChange={e => handleChange(e, 'spellCastTime')}
+          onChange={e => handleChange(e.target.value, 'spellCastTime')}
           size="small"
           fullWidth
         />
@@ -74,7 +75,7 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Zasięg"
-          onChange={handleSpellRangeChange}
+          onChange={e => handleChange(e.target.value, 'spellRange')}
           size="small"
           fullWidth
         />
@@ -83,7 +84,7 @@ const FormInputs = ({
         <FormControl component="fieldset">
           <RadioGroup
             row
-            onChange={e => handleChange(e, 'rangeUnit')}
+            onChange={e => handleChange(e.target.value, 'rangeUnit')}
             value={rangeUnit}
           >
             <FormControlLabel value="m" control={<Radio />} label="Metry" />
@@ -116,7 +117,7 @@ const FormInputs = ({
       <Grid item xs={6}>
         <TextField
           label="Czas trwania"
-          onChange={e => handleChange(e, 'spellDuration')}
+          onChange={e => handleChange(e.target.value, 'spellDuration')}
           size="small"
           fullWidth
         />
@@ -124,7 +125,7 @@ const FormInputs = ({
       <Grid item xs={12}>
         <TextField
           label="Opis"
-          onChange={e => handleChange(e, 'spellDescription')}
+          onChange={e => handleChange(e.target.value, 'spellDescription')}
           multiline
           fullWidth
           minRows={10}
